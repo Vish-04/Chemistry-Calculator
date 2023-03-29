@@ -19,18 +19,20 @@ function App() {
   }
 
   return (
-    <>
+    <div className='app'>
         <div className='title'>
           <h1 className='titletext'>THE CHEMISTRY CALCULATOR</h1>
         </div>
 
-        <div style={{width: windowWidth*.2}}>
+      <div style={{width: windowWidth*.2}}>
+        <div className='nav-container'>
           <div className='nav'>
               <a onClick={() => handleNavClick(1)}>Chemistry Reactions </a>
               <a onClick={() => handleNavClick(2)}>Gas Laws</a>
           </div>
         </div>
-    </>
+      </div>
+    </div>
   );
 }
 

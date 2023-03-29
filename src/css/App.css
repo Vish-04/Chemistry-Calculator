@@ -1,18 +1,35 @@
 .title{
   text-align: center;
-  background-color: darkblue;
+  background-color: #4CAF50;
   padding: 0.04px;
 }
 .titletext{
   color: white;
 }
-.nav{
-  background-color: darkblue;
+.app {
+  height: 100vh;
+}
+
+.nav-container {
   height: 100%;
+}
+
+.nav {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  height: 100%;
 }
-a{
-  color: white;
-  font-size: 20px;
+
+.nav a {
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+  color: #ffffff;
+  background-color: #4CAF50;
+}
+
+.nav a:hover {
+  background-color: #3e8e41;
 }
