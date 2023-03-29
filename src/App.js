@@ -13,8 +13,9 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, [window.innerWidth]);
 
-  function handleNavClick(){
-    console.log('clicked')
+  const handleNavClick = (page) =>{
+    console.log('clicked');
+    console.log(page);
   }
 
   return (
@@ -25,8 +26,8 @@ function App() {
 
         <div style={{width: windowWidth*.2}}>
           <div className='nav'>
-              <a onClick={handleNavClick}>Chemistry Reactions </a>
-              <a onClick={handleNavClick}>Gas Laws</a>
+              <a onClick={() => handleNavClick(1)}>Chemistry Reactions </a>
+              <a onClick={() => handleNavClick(2)}>Gas Laws</a>
           </div>
         </div>
     </>
