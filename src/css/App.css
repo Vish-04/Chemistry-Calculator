@@ -8,6 +8,8 @@
 }
 .app {
   height: 100vh;
+  display: flex;
+  flex-direction: row;
 }
 
 .nav-container {
@@ -17,7 +19,8 @@
 .nav {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: top;
+  background-color: #4CAF50;
   height: 100%;
 }
 
@@ -32,4 +35,5 @@
 
 .nav a:hover {
   background-color: #3e8e41;
+  cursor: pointer;
 }

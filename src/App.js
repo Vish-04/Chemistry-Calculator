@@ -13,18 +13,18 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, [window.innerWidth]);
 
+  const [outerNav, setOuterNav] = useState(0);
+
   const handleNavClick = (page) =>{
-    console.log('clicked');
-    console.log(page);
+    setOuterNav(page);
   }
-
   return (
-    <div className='app'>
-        <div className='title'>
+    <>
+    <div className='title'>
           <h1 className='titletext'>THE CHEMISTRY CALCULATOR</h1>
-        </div>
-
-      <div style={{width: windowWidth*.2}}>
+    </div>
+    <div className='app'>
+      <div style={{width: windowWidth*.1}}>
         <div className='nav-container'>
           <div className='nav'>
               <a onClick={() => handleNavClick(1)}>Chemistry Reactions </a>
@@ -32,7 +32,12 @@ function App() {
           </div>
         </div>
       </div>
+
+      {outerNav === 1 ? <p>SAY HI TO 1</p> : null}
+      {outerNav === 2 ? <p>WE DIP TO 2</p> : null}
+
     </div>
+    </>
   );
 }
 
