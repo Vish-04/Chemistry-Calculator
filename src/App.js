@@ -1,5 +1,6 @@
 import './css/App.css';
 import { useState, useEffect } from 'react';
+import CalcHome from './calcUI/CalcHome';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -82,10 +83,7 @@ function App() {
 
       {innerNav === 0 ? 
       <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
-        <h1>THIS IS CALC UI LOCATION</h1>
-        <h1>WASSS</h1>
-        <h2>up</h2>
-        <h3>lol</h3>
+        <CalcHome />
       </div>
       : null}
       {innerNav === 1 ? "hi" : null}
