@@ -32,6 +32,7 @@
   font-size: 18px;
   color: #ffffff;
   background-color: #4CAF50;
+  transition: all 0.2s ease-in-out;
 }
 
 .nav a:hover {
@@ -46,6 +47,7 @@
   text-decoration: none;
   font-size: 18px;
   color: #ffffff;
+  transition: all 0.2s ease-in-out;
 }
 
 .inner-nav-container {
@@ -67,6 +69,7 @@
   font-size: 10px;
   color: #ffffff;
   background-color: #4CAF50;
+  transition: all 0.2s ease-in-out;
 }
 
 .inner-nav a:hover {
