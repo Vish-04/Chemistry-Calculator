@@ -18,8 +18,17 @@ function App() {
   const [activeNav, setActiveNav] = useState(0);
 
   const handleOutterNavClick = (page) =>{
-    setOuterNav(page);
-    setActiveNav(page);
+    if (page === activeNav && outerNav != 0){
+      setOuterNav(0);
+    } else {
+      setOuterNav(page);
+    }
+
+    if (page === activeNav && innerNav == 0){
+      setActiveNav(0);
+    } else {
+      setActiveNav(page);
+    }
   }
   const handleInnerNavClick = (page) =>{
     setInnerNav(page);
