@@ -2,6 +2,7 @@ import './css/App.css';
 import { useState, useEffect } from 'react';
 import CalcHome from './calcUI/CalcHome';
 import MMCalc from './calcUI/MMCalc';
+import EquationBalanceCalc from './calcUI/EquationBalanceCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -92,7 +93,11 @@ function App() {
         <MMCalc />
       </div>
       : null}
-      {innerNav === 2 ? "hi" : null}
+      {innerNav === 2 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <EquationBalanceCalc />
+      </div>
+      : null}
       {innerNav === 3 ? "hi" : null}
       {innerNav === 4 ? "hi" : null}
       {innerNav === 5 ? "hi" : null}
