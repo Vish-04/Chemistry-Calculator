@@ -101,34 +101,37 @@ function calculateMolarMass(formula) {
     };
 
     const re = /([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)/g;
-    const stack = [{ count: 1 }];
-    let match;
-    while ((match = re.exec(formula)) !== null) {
-      if (match[1]) {
-        const element = match[1];
-        const count = match[2] === '' ? 1 : Number(match[2]);
-        const last = stack[stack.length - 1];
-        if (last.hasOwnProperty(element)) {
-          last[element] += count;
-        } else {
-          last[element] = count;
-        }
-      } else if (match[3]) {
-        stack.push({ count: Number(match[4] || 1) });
+  const stack = [{ count: 1 }];
+  let match;
+  while ((match = re.exec(formula)) !== null) {
+    if (match[1]) {
+      const element = match[1];
+      const count = match[2] === '' ? 1 : Number(match[2]);
+      const last = stack[stack.length - 1];
+      if (last.hasOwnProperty(element)) {
+        last[element] += count;
       } else {
-        const last = stack.pop();
-        const count = Number(match[5] || 1);
-        for (const [element, elementCount] of Object.entries(last)) {
-          const multipliedCount = count * elementCount;
-          const prev = stack[stack.length - 1];
-          if (prev.hasOwnProperty(element)) {
-            prev[element] += multipliedCount;
-          } else {
-            prev[element] = multipliedCount;
-          }
+        last[element] = count;
+      }
+    } else if (match[3]) {
+      stack.push({ count: Number(match[4] || 1) });
+    } else if (match[4] && stack.length > 1) {
+      const last = stack.pop();
+      const count = Number(match[5] || 1);
+      for (const [element, elementCount] of Object.entries(last)) {
+        const multipliedCount = count * elementCount;
+        const prev = stack[stack.length - 1];
+        if (prev.hasOwnProperty(element)) {
+          prev[element] += multipliedCount;
+        } else {
+          prev[element] = multipliedCount;
         }
       }
+    } else {
+        return "ERROR, invalid formula, check parentheses"
+        throw new Error('Invalid formula');
     }
+  }
 
     let elements = Object.keys(stack[0]);
     let elementCount = Object.values(stack[0]);
