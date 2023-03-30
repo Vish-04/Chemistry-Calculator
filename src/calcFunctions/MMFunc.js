@@ -135,6 +135,9 @@ function calculateMolarMass(formula) {
 
     let elements = Object.keys(stack[0]);
     let elementCount = Object.values(stack[0]);
+    console.log(elements);
+    console.log(elementCount);
+
     let i = 1;
     let molarMass = 0;
     while(i < elements.length){
