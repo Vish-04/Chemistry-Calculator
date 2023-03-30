@@ -14,9 +14,16 @@ function App() {
   }, [window.innerWidth]);
 
   const [outerNav, setOuterNav] = useState(0);
+  const [innerNav, setInnerNav] = useState(0);
+  const [activeNav, setActiveNav] = useState(0);
 
-  const handleNavClick = (page) =>{
+  const handleOutterNavClick = (page) =>{
     setOuterNav(page);
+    setActiveNav(page);
+  }
+  const handleInnerNavClick = (page) =>{
+    setInnerNav(page);
+    setOuterNav(0);
   }
   return (
     <>
@@ -27,14 +34,42 @@ function App() {
       <div style={{width: windowWidth*.1}}>
         <div className='nav-container'>
           <div className='nav'>
-              <a onClick={() => handleNavClick(1)}>Chemistry Reactions </a>
-              <a onClick={() => handleNavClick(2)}>Gas Laws</a>
+              <a className={activeNav === 1 ? "active" : "unactive"} onClick={() => handleOutterNavClick(1)}>Chemistry Reactions </a>
+              <a className={activeNav === 2 ? "active" : "unactive"} onClick={() => handleOutterNavClick(2)}>Gas Laws</a>
           </div>
         </div>
       </div>
 
-      {outerNav === 1 ? <p>SAY HI TO 1</p> : null}
-      {outerNav === 2 ? <p>WE DIP TO 2</p> : null}
+      {outerNav === 1 ? 
+      <div style={{width: windowWidth*.05}}>
+      <div className='inner-nav-container'>
+        <div className='inner-nav'>
+            <a onClick={() => handleInnerNavClick(1)}>Molar mass</a>
+            <a onClick={() => handleInnerNavClick(2)}>Equation Balance</a>
+            <a onClick={() => handleInnerNavClick(3)}>Limiting reagent</a>
+            <a onClick={() => handleInnerNavClick(4)}>Theoretical yield</a>
+        </div>
+      </div>
+    </div>
+       : null}
+      {outerNav === 2 ? 
+        <div style={{width: windowWidth*.05}}>
+        <div className='inner-nav-container'>
+          <div className='inner-nav'>
+              <a onClick={() => handleInnerNavClick(5)}>Boyles Law</a>
+              <a onClick={() => handleInnerNavClick(6)}>Gay Lussacs Law</a>
+              <a onClick={() => handleInnerNavClick(7)}>Charles Law</a>
+              <a onClick={() => handleInnerNavClick(8)}>Avagadros Law</a>
+              <a onClick={() => handleInnerNavClick(9)}>Grahams law</a>
+              <a onClick={() => handleInnerNavClick(10)}>Combined gas law</a>
+              <a onClick={() => handleInnerNavClick(11)}>Ideal Gas Law</a>
+              <a onClick={() => handleInnerNavClick(12)}>Root means square speed</a>
+              <a onClick={() => handleInnerNavClick(13)}>Most probable speed</a>
+              <a onClick={() => handleInnerNavClick(14)}>Mean speed</a>
+          </div>
+        </div>
+      </div>
+      : null}
 
     </div>
     </>
