@@ -22,6 +22,10 @@ function balanceChemicalEquation(input) {
     // Construct the matrix of coefficients for the system of equations
     const matrix = constructMatrix(leftFormulas, rightFormulas, atoms);
     console.log(matrix);
+    A =[]
+    for(let i=0;i < matrix.length; i++ ){
+        A.push(matrix[i][0-matrix.length-2])
+    }
   
     // Solve the system of equations to get the coefficients
     const coefficients = solveMatrix(matrix);
