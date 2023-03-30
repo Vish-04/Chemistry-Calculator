@@ -1,5 +1,6 @@
 import './css/App.css';
 import { useState, useEffect } from 'react';
+import CalcHome from './calcUI/CalcHome';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -40,17 +41,17 @@ function App() {
           <h1 className='titletext'>THE CHEMISTRY CALCULATOR</h1>
     </div>
     <div className='app'>
-      <div style={{width: windowWidth*.1}}>
+      <div style={{width: windowWidth*.1, minWidth: '100px'}}>
         <div className='nav-container'>
           <div className='nav'>
-              <a className={activeNav === 1 ? "active" : "unactive"} onClick={() => handleOutterNavClick(1)}>Chemistry Reactions </a>
+              <a className={activeNav === 1 ? "active" : "unactive"} onClick={() => handleOutterNavClick(1)}>Chemical Reactions </a>
               <a className={activeNav === 2 ? "active" : "unactive"} onClick={() => handleOutterNavClick(2)}>Gas Laws</a>
           </div>
         </div>
       </div>
-
+      {outerNav === 0 ? <div style={{width: windowWidth*.05, minWidth: '60px'}}></div>: null}
       {outerNav === 1 ? 
-      <div style={{width: windowWidth*.05}}>
+      <div style={{width: windowWidth*.05, minWidth: '60px'}}>
       <div className='inner-nav-container'>
         <div className='inner-nav'>
             <a onClick={() => handleInnerNavClick(1)}>Molar mass</a>
@@ -62,7 +63,7 @@ function App() {
     </div>
        : null}
       {outerNav === 2 ? 
-        <div style={{width: windowWidth*.05}}>
+        <div style={{width: windowWidth*.05, minWidth: '60px'}}>
         <div className='inner-nav-container'>
           <div className='inner-nav'>
               <a onClick={() => handleInnerNavClick(5)}>Boyles Law</a>
@@ -79,6 +80,27 @@ function App() {
         </div>
       </div>
       : null}
+
+      {innerNav === 0 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <CalcHome />
+      </div>
+      : null}
+      {innerNav === 1 ? "hi" : null}
+      {innerNav === 2 ? "hi" : null}
+      {innerNav === 3 ? "hi" : null}
+      {innerNav === 4 ? "hi" : null}
+      {innerNav === 5 ? "hi" : null}
+      {innerNav === 6 ? "hi" : null}
+      {innerNav === 7 ? "hi" : null}
+      {innerNav === 8 ? "hi" : null}
+      {innerNav === 9 ? "hi" : null}
+      {innerNav === 10 ? "hi" : null}
+      {innerNav === 11 ? "hi" : null}
+      {innerNav === 12 ? "hi" : null}
+      {innerNav === 13 ? "hi" : null}
+      {innerNav === 14 ? "hi" : null}
+
 
     </div>
     </>
