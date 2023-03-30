@@ -20,16 +20,19 @@ function balanceChemicalEquation(input) {
     console.log(atoms);
   
     // Construct the matrix of coefficients for the system of equations
-    const matrix = constructMatrix(leftFormulas, rightFormulas, atoms);
-    console.log(matrix);
-    A =[]
-    for(let i=0;i < matrix.length; i++ ){
-        A.push(matrix[i][0-matrix.length-2])
-    }
-  
-    // Solve the system of equations to get the coefficients
-    const coefficients = solveMatrix(matrix);
-    console.log(coefficients)
+    const coefficientMatrix = constructMatrix(leftFormulas, rightFormulas, atoms);
+    const rrefCoefficientMatrix = rref(coefficientMatrix);
+    console.log("MATRIX");
+    console.log(coefficientMatrix);
+
+    console.log("RREF");
+    console.log(rrefCoefficientMatrix);
+    
+    const nullCoefficientMatrix = nullSpace(rrefCoefficientMatrix);
+    console.log("NULLSPACE");
+    console.log(nullCoefficientMatrix);
+    
+    const coefficients = []; 
   
     // Construct the balanced equation string
     let balancedEquation = "";
@@ -56,6 +59,83 @@ function balanceChemicalEquation(input) {
     return balancedEquation;
 
   }
+  
+  function rref(A) {
+    const numRows = A.length;
+    const numCols = A[0].length;
+  
+    let lead = 0;
+    for (let r = 0; r < numRows; r++) {
+      if (lead >= numCols) {
+        return;
+      }
+      let i = r;
+      while (A[i][lead] === 0) {
+        i++;
+        if (i === numRows) {
+          i = r;
+          lead++;
+          if (lead === numCols) {
+            return;
+          }
+        }
+      }
+      let tempRow = A[i];
+      A[i] = A[r];
+      A[r] = tempRow;
+  
+      let lv = A[r][lead];
+      for (let j = 0; j < numCols; j++) {
+        A[r][j] = A[r][j] / lv;
+      }
+  
+      for (let i = 0; i < numRows; i++) {
+        if (i !== r) {
+          lv = A[i][lead];
+          for (let j = 0; j < numCols; j++) {
+            A[i][j] -= lv * A[r][j];
+          }
+        }
+      }
+      lead++;
+    }
+    return A;
+  }
+
+  function nullSpace(rref) {
+    const numRows = rref.length;
+    const numCols = rref[0].length;
+  
+    // Find basic and free variables
+    let basicVars = [];
+    let freeVars = [];
+    for (let i = 0; i < numRows; i++) {
+      let row = rref[i];
+      let pivotCol = row.findIndex(val => val !== 0 && !basicVars.includes(row.indexOf(val)));
+      if (pivotCol >= 0) {
+        basicVars.push(pivotCol);
+      } else {
+        freeVars.push(i);
+      }
+    }
+  
+    // Construct basis for null space
+    let basis = [];
+    for (let i = 0; i < numCols; i++) {
+      if (!basicVars.includes(i)) {
+        let vec = new Array(numCols).fill(0);
+        vec[i] = 1;
+        for (let j of basicVars) {
+          if (j < rref.length && i < rref[j].length) {
+            vec[j] = -rref[j][i];
+          }
+        }
+        basis.push(vec);
+      }
+    }
+  
+    return basis;
+  }  
   
   function parseFormulas(side) {
     const formulas = side.split("+").map((f) => f.trim());
@@ -85,7 +165,7 @@ function balanceChemicalEquation(input) {
       }
       for (const formula of rightFormulas) {
         const count = getCountOfAtomInFormula(atom, formula);
-        row.push(count);
+        row.push(-count);
       }
       matrix.push(row);
     }
@@ -93,63 +173,48 @@ function balanceChemicalEquation(input) {
   }
   
   function getCountOfAtomInFormula(atom, formula) {
-    const regex = new RegExp(`${atom}(\\d*)`, "g");
-    let match = regex.exec(formula);
-    if (match === null) {
-      return 0;
-    } else {
-      const countString = match[1] || "1";
-      const count = parseInt(countString, 10);
-      return count;
+    const re = /([A-Z][a-z]*)(\d*)|(\()|(\))(\d*)/g;
+    const stack = [{ count: 1 }];
+    let match;
+    while ((match = re.exec(formula)) !== null) {
+        if (match[1]) {
+        const element = match[1];
+        const count = match[2] === '' ? 1 : Number(match[2]);
+        const last = stack[stack.length - 1];
+        if (last.hasOwnProperty(element)) {
+            last[element] += count;
+        } else {
+            last[element] = count;
+        }
+        } else if (match[3]) {
+        stack.push({ count: Number(match[4] || 1) });
+        } else if (match[4] && stack.length > 1) {
+        const last = stack.pop();
+        const count = Number(match[5] || 1);
+        for (const [element, elementCount] of Object.entries(last)) {
+            const multipliedCount = count * elementCount;
+            const prev = stack[stack.length - 1];
+            if (prev.hasOwnProperty(element)) {
+            prev[element] += multipliedCount;
+            } else {
+            prev[element] = multipliedCount;
+            }
+        }
+        } else {
+            return "ERROR, invalid formula, check parentheses"
+            throw new Error('Invalid formula');
+        }
     }
+    let count = stack[0][atom]; 
+    if (isNaN(count)){
+        return 0;
+    }
+    console.log("STACK and COUNT and ATOM");
+    console.log(atom);
+    console.log(stack[0]);
+    console.log(count);
+    return count;
   }
-  
-  function solveMatrix(matrix) {
-    const augmentedMatrix = matrix.map((row) => [...row]);
-    for (let i = 0; i < matrix.length; i++) {
-      augmentedMatrix[i].push(0);
-    }
-    const n = matrix.length;
-    for (let i = 0; i < n; i++) {
-    // Pivot row
-    let pivotRow = i;
-    let pivotValue = augmentedMatrix[pivotRow][i];
-    for (let j = i + 1; j < n; j++) {
-      if (Math.abs(augmentedMatrix[j][i]) > Math.abs(pivotValue)) {
-        pivotRow = j;
-        pivotValue = augmentedMatrix[pivotRow][i];
-      }
-    }
-
-    // Swap rows
-    if (pivotRow !== i) {
-      [augmentedMatrix[i], augmentedMatrix[pivotRow]] = [
-        augmentedMatrix[pivotRow],
-        augmentedMatrix[i],
-      ];
-    }
-
-    // Eliminate column
-    for (let j = i + 1; j < n; j++) {
-      const factor = augmentedMatrix[j][i] / augmentedMatrix[i][i];
-      for (let k = i; k <= n; k++) {
-        augmentedMatrix[j][k] -= factor * augmentedMatrix[i][k];
-      }
-    }
-  }
-
-  // Back-substitute to get the coefficients
-  const coefficients = new Array(n).fill(0);
-  for (let i = n - 1; i >= 0; i--) {
-    let sum = 0;
-    for (let j = i + 1; j < n; j++) {
-      sum += augmentedMatrix[i][j] * coefficients[j];
-    }
-    coefficients[i] = (augmentedMatrix[i][n] - sum) / augmentedMatrix[i][i];
-  }
-
-  return coefficients;
-}
   
 
 export default balanceChemicalEquation;
