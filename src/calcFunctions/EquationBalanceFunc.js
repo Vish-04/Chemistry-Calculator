@@ -1,34 +1,28 @@
+const math = require('mathjs');
+
+
 function balanceChemicalEquation(input) {
+    console.log("FRACTIONS");
+    console.log(math.fraction(0.333));
+
     // Split the input string into the left-hand and right-hand sides
     const sides = input.split("=");
     const leftSide = sides[0].trim();
     const rightSide = sides[1].trim();
-
-    console.log("SIDES");
-    console.log(leftSide, rightSide);
   
     // Parse the formulas on each side of the equation
     const leftFormulas = parseFormulas(leftSide);
     const rightFormulas = parseFormulas(rightSide);
-    console.log("LEFTFORMULAS");
-    console.log(leftFormulas);
-    console.log("RIGHTFORMULAS");
-    console.log(rightFormulas);
 
     // Get the list of all unique atoms in the equation
     const atoms = getUniqueAtoms([...leftFormulas, ...rightFormulas]);
-    console.log(atoms);
   
     // Construct the matrix of coefficients for the system of equations
     const coefficientMatrix = constructMatrix(leftFormulas, rightFormulas, atoms);
-    const rrefCoefficientMatrix = rref(coefficientMatrix);
     console.log("MATRIX");
     console.log(coefficientMatrix);
-
-    console.log("RREF");
-    console.log(rrefCoefficientMatrix);
     
-    const nullCoefficientMatrix = nullSpace(rrefCoefficientMatrix);
+    const nullCoefficientMatrix = findNullSpace(coefficientMatrix);
     console.log("NULLSPACE");
     console.log(nullCoefficientMatrix);
     
@@ -102,40 +96,48 @@ function balanceChemicalEquation(input) {
     return A;
   }
 
+  function removeZeroRows(matrix) {
+    return matrix.filter(row => !row.every(element => element === 0));
+  }
+
   function nullSpace(rref) {
+    // Get the dimensions of the matrix
     const numRows = rref.length;
     const numCols = rref[0].length;
   
-    // Find basic and free variables
-    let basicVars = [];
-    let freeVars = [];
-    for (let i = 0; i < numRows; i++) {
-      let row = rref[i];
-      let pivotCol = row.findIndex(val => val !== 0 && !basicVars.includes(row.indexOf(val)));
-      if (pivotCol >= 0) {
-        basicVars.push(pivotCol);
-      } else {
-        freeVars.push(i);
+    // Find the columns corresponding to the free variables
+    const freeCols = [];
+    for (let j = 0; j < numCols - 1; j++) {
+      let isFree = true;
+      for (let i = 0; i < numRows; i++) {
+        if (rref[i][j] !== 0) {
+          isFree = false;
+          break;
+        }
+      }
+      if (isFree) {
+        freeCols.push(j);
       }
     }
   
-    // Construct basis for null space
-    let basis = [];
-    for (let i = 0; i < numCols; i++) {
-      if (!basicVars.includes(i)) {
-        let vec = new Array(numCols).fill(0);
-        vec[i] = 1;
-        for (let j of basicVars) {
-          if (j < rref.length && i < rref[j].length) {
-            vec[j] = -rref[j][i];
+    // Generate the basis of the nullspace using the free variables
+    const basis = [];
+    for (let j of freeCols) {
+      const vec = Array(numCols - 1).fill(0);
+      vec[j] = 1;
+      for (let i = 0; i < numRows; i++) {
+        if (rref[i][j] !== 0) {
+          for (let k of freeCols) {
+            vec[k] -= rref[i][k] * vec[j];
           }
+          vec[numCols - 1] += rref[i][j] * vec[j];
         }
-        basis.push(vec);
       }
+      basis.push(vec);
     }
   
     return basis;
-  }  
+  } 
   
   function parseFormulas(side) {
     const formulas = side.split("+").map((f) => f.trim());
@@ -209,12 +211,29 @@ function balanceChemicalEquation(input) {
     if (isNaN(count)){
         return 0;
     }
-    console.log("STACK and COUNT and ATOM");
-    console.log(atom);
-    console.log(stack[0]);
-    console.log(count);
     return count;
   }
+
+function findNullSpace(matrix) {
+    const m = matrix.length;
+    const n = matrix[0].length;
+    console.log(m,n);
+    matrix = math.matrix(matrix);
+
+    const A = math.subset(matrix, math.index(math.range(0, m), math.range(0, n - 1)));
+    console.log("A", A);
+
+    
+    const b = math.subset(matrix, math.index(math.range(0, m), n - 1));
   
+
+    console.log("B");
+    console.log(b);
+    const x = math.lusolve(A, b);
+    console.log("X")
+    console.log(x);
+    return x;
+    return x._data.map(row => row[0]);
+}
 
 export default balanceChemicalEquation;
