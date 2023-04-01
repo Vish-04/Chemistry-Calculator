@@ -21,6 +21,8 @@ function balanceChemicalEquation(input) {
     const coefficientMatrix = constructMatrix(leftFormulas, rightFormulas, atoms);
     console.log("MATRIX");
     console.log(coefficientMatrix);
+
+    console.log(rref(coefficientMatrix));
     
     const nullCoefficientMatrix = findNullSpace(coefficientMatrix);
     console.log("NULLSPACE");

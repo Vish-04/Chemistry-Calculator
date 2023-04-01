@@ -1,6 +1,6 @@
 import '../css/EquationBalanceCalc.css';
 import { useState, useEffect } from 'react';
-import balanceChemicalEquation from '../calcFunctions/EquationBalanceFunc';
+import balanceChemicalEquation from '../calcFunctions/EquationBalanceFunc2';
 
 function EquationBalanceCalc() {
     const [text, setText] = useState("");
