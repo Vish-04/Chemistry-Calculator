@@ -17,7 +17,7 @@ function MMCalc() {
         <input placeholder='Ex: CaCO3, NH4NO2, BaBr2' onChange={(val)=>{setText(val.target.value);}} />
         <button className='submit' onClick={handleSubmit}>Calculate</button>
         <h3>Calculated Molar Mass:</h3>
-        <h4>{molarMassText}</h4>
+        <h4>{molarMassText} g/mol</h4>
     </div>
   );
 }
