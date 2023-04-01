@@ -19,10 +19,11 @@ function CalculateBoyle (p1, p2, v1, v2){
     if (parseFloat(v2) <=0){
         return {error: true, message:`Volume V2 cannot be 0 or lower`, value:null}
     } 
-    if (Math.sign(parseFloat(p1)) != Math.sign(parseFloat(p2))){
-        return {error: true, message:`Pressure Signs Mismatch: P1 and P2 should have the same signs`, value:null}
-    } 
-    
+    if(!isNaN(parseFloat(p1))&&!isNaN(parseFloat(p2))){
+        if (Math.sign(parseFloat(p1)) != Math.sign(parseFloat(p2))){
+            return {error: true, message:`Pressure Signs Mismatch: P1 and P2 should have the same signs`, value:null}
+        } 
+    }
     
     if (isNaN(parseFloat(p1))){
 
