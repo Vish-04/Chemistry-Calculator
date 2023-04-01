@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import CalcHome from './calcUI/CalcHome';
 import MMCalc from './calcUI/MMCalc';
 import BoyleCalc from './calcUI/BoyleCalc';
+import CharlesCalc from './calcUI/CharlesCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -69,8 +70,8 @@ function App() {
         <div className='inner-nav-container'>
           <div className='inner-nav'>
               <a onClick={() => handleInnerNavClick(5)}>Boyles Law</a>
-              <a onClick={() => handleInnerNavClick(6)}>Gay Lussacs Law</a>
-              <a onClick={() => handleInnerNavClick(7)}>Charles Law</a>
+              <a onClick={() => handleInnerNavClick(6)}>Charles Law</a>
+              <a onClick={() => handleInnerNavClick(7)}>Gay Lussacs Law</a>
               <a onClick={() => handleInnerNavClick(8)}>Avagadros Law</a>
               <a onClick={() => handleInnerNavClick(9)}>Grahams law</a>
               <a onClick={() => handleInnerNavClick(10)}>Combined gas law</a>
@@ -101,7 +102,11 @@ function App() {
         <BoyleCalc />
       </div>
       : null}
-      {innerNav === 6 ? "hi" : null}
+      {innerNav === 6 ? 
+        <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+          <CharlesCalc />
+        </div>
+      : null}
       {innerNav === 7 ? "hi" : null}
       {innerNav === 8 ? "hi" : null}
       {innerNav === 9 ? "hi" : null}

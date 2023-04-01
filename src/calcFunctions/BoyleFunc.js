@@ -1,7 +1,6 @@
 function CalculateBoyle (p1, p2, v1, v2){
     // validation check
     const valid ={P1:ValidateInput(p1), P2:ValidateInput(p2), V1:ValidateInput(v1), V2:ValidateInput(v2)}
-    console.log(valid);
     for(const key in valid){
         if (valid[key] == false){
             return {error: true, message:`Invalid Input at ${key}`, value:null}

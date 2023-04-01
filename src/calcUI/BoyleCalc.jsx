@@ -20,7 +20,6 @@ function BoyleCalc() {
       }, [pOne, pTwo, vOne, vTwo]);
 
     function handleSubmit (){
-        console.log(pOne, pTwo, vOne, vTwo);
         setResult(CalculateBoyle(pOne, pTwo, vOne, vTwo));
     }
 
