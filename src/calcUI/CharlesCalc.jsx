@@ -1,4 +1,4 @@
-import '../css/BoyleCalc.css';
+import '../css/CharlesCalc.css';
 import { useState, useEffect } from 'react';
 import CalculateCharles from '../calcFunctions/CharlesFunc';
 

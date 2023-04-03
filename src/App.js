@@ -6,6 +6,7 @@ import BoyleCalc from './calcUI/BoyleCalc';
 import CharlesCalc from './calcUI/CharlesCalc';
 import GLCalc from './calcUI/GLCalc';
 import AvagadroCalc from './calcUI/AvagadroCalc';
+import GrahamCalc from './calcUI/GrahamCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -116,10 +117,14 @@ function App() {
       : null}
       {innerNav === 8 ? 
       <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
-      <AvagadroCalc />
-    </div>
+        <AvagadroCalc />
+      </div>
       : null}
-      {innerNav === 9 ? "hi" : null}
+      {innerNav === 9 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <GrahamCalc />
+      </div>
+      : null}
       {innerNav === 10 ? "hi" : null}
       {innerNav === 11 ? "hi" : null}
       {innerNav === 12 ? "hi" : null}
