@@ -1,4 +1,4 @@
-import '../css/BoyleCalc.css';
+import '../css/AvagadroCalc.css';
 import { useState, useEffect } from 'react';
 import CalculateAvagadro from '../calcFunctions/AvagadroFunc';
 

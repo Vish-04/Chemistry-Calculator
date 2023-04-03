@@ -1,4 +1,4 @@
-import '../css/BoyleCalc.css';
+import '../css/GLCalc.css';
 import { useState, useEffect } from 'react';
 import CalculateGL from '../calcFunctions/GLFunc';
 

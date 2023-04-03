@@ -142,6 +142,9 @@ function calculateMolarMass(formula) {
         molarMass = molarMass + atomicMasses[e]*elementCount[i];
         i = i+1;
     }
+      if (molarMass == 0){
+        return "ERROR, no molecule detected"
+      }
       return molarMass;
   }
   
