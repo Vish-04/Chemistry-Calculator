@@ -9,11 +9,11 @@ function CalculateGraham(r1, r2, m1, m2){
       return {error: true, message: m1, value:null}
     }
   }
-  if(m2 != "" && isNaN(parseFloat(m1))){
+  if(m2 != "" && isNaN(parseFloat(m2))){
     m2 = calculateMolarMass(m2);
     console.log(m2);
-    if (typeof m1 == String){
-      return {error: true, message: m1, value:null}
+    if (typeof m2 == String){
+      return {error: true, message: m2, value:null}
     }
   }
   // validation check
@@ -39,19 +39,21 @@ function CalculateGraham(r1, r2, m1, m2){
   
   if (isNaN(parseFloat(r1))){
 
-    return {error: false, message:"", value: (parseFloat(r2)*Math.sqrt(m2/m1))}
+    return {error: false, message:"", value: (parseFloat(r2)*Math.sqrt(parseFloat(m2)/parseFloat(m1)))}
 
   } else if (isNaN(parseFloat(r2))){
 
-    return {error: false, message:"", value: (parseFloat(r1)*Math.sqrt(m1/m2))}
+    return {error: false, message:"", value: (parseFloat(r1)*Math.sqrt(parseFloat(m1)/parseFloat(m2)))}
 
   } else if (isNaN(parseFloat(m1))){
+    console.log("M1, M2, R1, R2", m1, parseFloat(m2), parseFloat(r1), parseFloat(r2));
 
-    return {error: false, message:"", value: (m2*Math.pow((parseFloat(r2)/parseFloat(r1), 2)))}
+    return {error: false, message:"", value: (parseFloat(m2)*Math.pow((parseFloat(r2)/parseFloat(r1)), 2))}
 
   } else if (isNaN(parseFloat(m2))){
+    console.log("M1, M2, R1, R2", parseFloat(m1), m2, parseFloat(r1), parseFloat(r2));
 
-    return {error: false, message:"", value: (m1*Math.pow((parseFloat(r1)/parseFloat(r2), 2)))}
+    return {error: false, message:"", value: (parseFloat(m1)*Math.pow((parseFloat(r1)/parseFloat(r2)), 2))}
 
   }
   
