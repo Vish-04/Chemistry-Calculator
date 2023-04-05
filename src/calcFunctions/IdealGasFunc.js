@@ -8,7 +8,7 @@ function CalculateIdealGas (pressure, volume, moles, temperature){
         }
     }
     
-    if (parseFloat(pressure) <=0){
+    if (parseFloat(pressure.value) <=0){
         return {error: true, message:`Pressure cannot be 0 or lower`, value:null}
     } 
     if (parseFloat(volume) <=0){
@@ -21,20 +21,20 @@ function CalculateIdealGas (pressure, volume, moles, temperature){
         return {error: true, message:`Temperature cannot be 0 or lower`, value:null}
     } 
 
-    if (pressure.units == "kPa"){
-        pressure.units = "atm";
-        pressure.value = (parseFloat(pressure.value) * 0.00986923).toString();
-    
-    } else if(pressure.units == "Pa") {
-        pressure.units = "atm";
-        pressure.value = (parseFloat(pressure.value) * (0.00986923/1000)).toString();
-    } else if(pressure.units == "Bar") {
-        pressure.units = "atm";
-        pressure.value = (parseFloat(pressure.value) * (0.00986923*100)).toString();
-    } else if(pressure.units == "mmHg" || pressure.units == "Torr") {
-        pressure.units = "atm";
-        pressure.value = (parseFloat(pressure.value)/760).toString();
-    }
+    // let tempPressure = pressure;
+    // if (pressure.units == "kPa"){
+    //     tempPressure.units = "atm";
+    //     tempPressure.value = (parseFloat(pressure.value) * 0.00986923).toString();
+    // } else if(pressure.units == "Pa") {
+    //     tempPressure.units = "atm";
+    //     tempPressure.value = (parseFloat(pressure.value) * (0.00986923/1000)).toString();
+    // } else if(pressure.units == "Bar") {
+    //     tempPressure.units = "atm";
+    //     tempPressure.value = (parseFloat(pressure.value) * (0.00986923*100)).toString();
+    // } else if(pressure.units == "mmHg" || pressure.units == "Torr") {
+    //     tempPressure.units = "atm";
+    //     tempPressure.value = (parseFloat(pressure.value)/760).toString();
+    // }
     
     if (isNaN(parseFloat(pressure.value))){
 

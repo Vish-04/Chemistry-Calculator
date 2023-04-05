@@ -9,6 +9,15 @@ function IdealGasCalc() {
     const [temperature, setTemperature] = useState("");
     const [disabled, setDisabled] = useState(0);
     const [result, setResult] = useState({});
+    const pressureFactors = {
+        atm: 1,
+        kPa: 101.325,
+        Pa: 101325,
+        Bar: 1.01325,
+        mmHg: 760,
+        Torr: 760,
+      };
+      
 
     useEffect(() => {
         const inputs = [pressure, volume, moles, temperature].filter((input) => input != "");
@@ -20,12 +29,18 @@ function IdealGasCalc() {
       }, [pressure, volume, moles, temperature]);
 
     function handleSubmit (){
-        setResult(CalculateIdealGas(pressure, volume, moles, temperature));
+        const tempPressure = { ...pressure };
+        if (pressure.units !== "atm") {
+            tempPressure.units = "atm";
+            tempPressure.value = (
+            parseFloat(pressure.value) / pressureFactors[pressure.units]
+            ).toString();
+        }
+        setResult(CalculateIdealGas(tempPressure, volume, moles, temperature));
     }
 
     function handleDropdown(e){
-        setPressure({value: pressure.value, units:e.target.value})
-        console.log(pressure);
+        setPressure({value: pressure.value, units:e.target.value});
     }
 
   return (
@@ -35,7 +50,10 @@ function IdealGasCalc() {
             <div style={{display: 'flex', flexDirection: 'column'}}>
                 <label htmlFor='p' className='input-label'>Pressure</label>
                 <div style={{display:'flex', flexDirection:"row", justifyContent:"center"}}>
-                    <input id='p' className='input' disabled={disabled == 1} placeholder='ENTER Pressure' onChange={(val) => { setPressure({value:val.target.value, units:pressure.units}); }} />
+                    <input id='p' className='input' disabled={disabled == 1} placeholder='ENTER Pressure' onChange={(val) => { 
+                        setPressure({value:val.target.value, units:pressure.units});
+                        console.log(pressure); 
+                }} />
                     <select id="dropdown"  onChange={handleDropdown}>
                         <option value="atm">atm</option>
                         <option value="kPa">kPa</option>
