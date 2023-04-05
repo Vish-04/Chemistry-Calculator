@@ -10,6 +10,7 @@ import GrahamCalc from './calcUI/GrahamCalc';
 import IdealGasCalc from './calcUI/IdealGasCalc';
 import VRMSCalc from './calcUI/VRMSCalc';
 import MostProbableCalc from './calcUI/MostProbableCalc';
+import MeanSpeedCalc from './calcUI/MeanSpeedCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -142,7 +143,11 @@ function App() {
         <MostProbableCalc />
       </div>
       : null}
-      {innerNav === 13 ? "hi" : null}
+      {innerNav === 13 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MeanSpeedCalc />
+      </div>
+      : null}
 
     </div>
     </>
