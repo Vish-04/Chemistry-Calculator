@@ -9,6 +9,7 @@ import AvagadroCalc from './calcUI/AvagadroCalc';
 import GrahamCalc from './calcUI/GrahamCalc';
 import IdealGasCalc from './calcUI/IdealGasCalc';
 import VRMSCalc from './calcUI/VRMSCalc';
+import MostProbableCalc from './calcUI/MostProbableCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -136,7 +137,11 @@ function App() {
         <VRMSCalc />
       </div>
       : null}
-      {innerNav === 12 ? "hi" : null}
+      {innerNav === 12 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MostProbableCalc />
+      </div>
+      : null}
       {innerNav === 13 ? "hi" : null}
 
     </div>
