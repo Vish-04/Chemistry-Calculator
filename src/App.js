@@ -8,6 +8,9 @@ import GLCalc from './calcUI/GLCalc';
 import AvagadroCalc from './calcUI/AvagadroCalc';
 import GrahamCalc from './calcUI/GrahamCalc';
 import IdealGasCalc from './calcUI/IdealGasCalc';
+import VRMSCalc from './calcUI/VRMSCalc';
+import MostProbableCalc from './calcUI/MostProbableCalc';
+import MeanSpeedCalc from './calcUI/MeanSpeedCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -79,7 +82,7 @@ function App() {
               <a onClick={() => handleInnerNavClick(8)}>Avagadro's Law</a>
               <a onClick={() => handleInnerNavClick(9)}>Graham's law</a>
               <a onClick={() => handleInnerNavClick(10)}>Ideal Gas Law</a>
-              <a onClick={() => handleInnerNavClick(11)}>Root means square speed</a>
+              <a onClick={() => handleInnerNavClick(11)}>Root mean square speed</a>
               <a onClick={() => handleInnerNavClick(12)}>Most probable speed</a>
               <a onClick={() => handleInnerNavClick(13)}>Mean speed</a>
           </div>
@@ -130,9 +133,21 @@ function App() {
         <IdealGasCalc />
       </div>
       : null}
-      {innerNav === 11 ? "hi" : null}
-      {innerNav === 12 ? "hi" : null}
-      {innerNav === 13 ? "hi" : null}
+      {innerNav === 11 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <VRMSCalc />
+      </div>
+      : null}
+      {innerNav === 12 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MostProbableCalc />
+      </div>
+      : null}
+      {innerNav === 13 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MeanSpeedCalc />
+      </div>
+      : null}
 
     </div>
     </>
