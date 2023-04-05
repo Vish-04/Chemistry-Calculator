@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react';
 import CalcHome from './calcUI/CalcHome';
 import MMCalc from './calcUI/MMCalc';
 import EquationBalanceCalc from './calcUI/EquationBalanceCalc';
+import BoyleCalc from './calcUI/BoyleCalc';
+import CharlesCalc from './calcUI/CharlesCalc';
+import GLCalc from './calcUI/GLCalc';
+import AvagadroCalc from './calcUI/AvagadroCalc';
+import GrahamCalc from './calcUI/GrahamCalc';
+import IdealGasCalc from './calcUI/IdealGasCalc';
+import VRMSCalc from './calcUI/VRMSCalc';
+import MostProbableCalc from './calcUI/MostProbableCalc';
+import MeanSpeedCalc from './calcUI/MeanSpeedCalc';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -68,16 +77,15 @@ function App() {
         <div style={{width: windowWidth*.05, minWidth: '60px'}}>
         <div className='inner-nav-container'>
           <div className='inner-nav'>
-              <a onClick={() => handleInnerNavClick(5)}>Boyles Law</a>
-              <a onClick={() => handleInnerNavClick(6)}>Gay Lussacs Law</a>
-              <a onClick={() => handleInnerNavClick(7)}>Charles Law</a>
-              <a onClick={() => handleInnerNavClick(8)}>Avagadros Law</a>
-              <a onClick={() => handleInnerNavClick(9)}>Grahams law</a>
-              <a onClick={() => handleInnerNavClick(10)}>Combined gas law</a>
-              <a onClick={() => handleInnerNavClick(11)}>Ideal Gas Law</a>
-              <a onClick={() => handleInnerNavClick(12)}>Root means square speed</a>
-              <a onClick={() => handleInnerNavClick(13)}>Most probable speed</a>
-              <a onClick={() => handleInnerNavClick(14)}>Mean speed</a>
+              <a onClick={() => handleInnerNavClick(5)}>Boyle's Law</a>
+              <a onClick={() => handleInnerNavClick(6)}>Charle's Law</a>
+              <a onClick={() => handleInnerNavClick(7)}>Gay Lussac's Law</a>
+              <a onClick={() => handleInnerNavClick(8)}>Avagadro's Law</a>
+              <a onClick={() => handleInnerNavClick(9)}>Graham's law</a>
+              <a onClick={() => handleInnerNavClick(10)}>Ideal Gas Law</a>
+              <a onClick={() => handleInnerNavClick(11)}>Root mean square speed</a>
+              <a onClick={() => handleInnerNavClick(12)}>Most probable speed</a>
+              <a onClick={() => handleInnerNavClick(13)}>Mean speed</a>
           </div>
         </div>
       </div>
@@ -100,17 +108,51 @@ function App() {
       : null}
       {innerNav === 3 ? "hi" : null}
       {innerNav === 4 ? "hi" : null}
-      {innerNav === 5 ? "hi" : null}
-      {innerNav === 6 ? "hi" : null}
-      {innerNav === 7 ? "hi" : null}
-      {innerNav === 8 ? "hi" : null}
-      {innerNav === 9 ? "hi" : null}
-      {innerNav === 10 ? "hi" : null}
-      {innerNav === 11 ? "hi" : null}
-      {innerNav === 12 ? "hi" : null}
-      {innerNav === 13 ? "hi" : null}
-      {innerNav === 14 ? "hi" : null}
-
+      {innerNav === 5 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <BoyleCalc />
+      </div>
+      : null}
+      {innerNav === 6 ? 
+        <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+          <CharlesCalc />
+        </div>
+      : null}
+      {innerNav === 7 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <GLCalc />
+      </div>
+      : null}
+      {innerNav === 8 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <AvagadroCalc />
+      </div>
+      : null}
+      {innerNav === 9 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <GrahamCalc />
+      </div>
+    : null}
+      {innerNav === 10 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <IdealGasCalc />
+      </div>
+      : null}
+      {innerNav === 11 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <VRMSCalc />
+      </div>
+      : null}
+      {innerNav === 12 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MostProbableCalc />
+      </div>
+      : null}
+      {innerNav === 13 ? 
+      <div style={{textAlign: 'center', width: '100%', height: '100%'}}>
+        <MeanSpeedCalc />
+      </div>
+      : null}
 
     </div>
     </>
