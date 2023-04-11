@@ -1,10 +1,6 @@
-const math = require('mathjs');
-
+import Fraction from 'fraction.js';
 
 function balanceChemicalEquation(input) {
-    console.log("FRACTIONS");
-    console.log(math.fraction(0.333));
-
     // Split the input string into the left-hand and right-hand sides
     const sides = input.split("=");
     const leftSide = sides[0].trim();
@@ -12,6 +8,7 @@ function balanceChemicalEquation(input) {
   
     // Parse the formulas on each side of the equation
     const leftFormulas = parseFormulas(leftSide);
+    console.log(leftFormulas);
     const rightFormulas = parseFormulas(rightSide);
 
     // Get the list of all unique atoms in the equation
@@ -22,14 +19,12 @@ function balanceChemicalEquation(input) {
     console.log("MATRIX");
     console.log(coefficientMatrix);
 
-    console.log(rref(coefficientMatrix));
-    
-    const nullCoefficientMatrix = findNullSpace(coefficientMatrix);
-    console.log("NULLSPACE");
-    console.log(nullCoefficientMatrix);
-    
-    const coefficients = []; 
-  
+    console.log("SOLVED MATRIX")
+    const solvedMatrix = balance(coefficientMatrix);
+    console.log(solvedMatrix);
+
+
+    const coefficients = multiplyColumns(solvedMatrix);
     // Construct the balanced equation string
     let balancedEquation = "";
     for (let i = 0; i < leftFormulas.length; i++) {
@@ -50,96 +45,13 @@ function balanceChemicalEquation(input) {
       }
     }
   
-    console.log("BALANCED EQUATION");
-    console.log(balancedEquation);
-    return balancedEquation;
+    return {error: false, message: "", value: balancedEquation};
 
-  }
-  
-  function rref(A) {
-    const numRows = A.length;
-    const numCols = A[0].length;
-  
-    let lead = 0;
-    for (let r = 0; r < numRows; r++) {
-      if (lead >= numCols) {
-        return;
-      }
-      let i = r;
-      while (A[i][lead] === 0) {
-        i++;
-        if (i === numRows) {
-          i = r;
-          lead++;
-          if (lead === numCols) {
-            return;
-          }
-        }
-      }
-      let tempRow = A[i];
-      A[i] = A[r];
-      A[r] = tempRow;
-  
-      let lv = A[r][lead];
-      for (let j = 0; j < numCols; j++) {
-        A[r][j] = A[r][j] / lv;
-      }
-  
-      for (let i = 0; i < numRows; i++) {
-        if (i !== r) {
-          lv = A[i][lead];
-          for (let j = 0; j < numCols; j++) {
-            A[i][j] -= lv * A[r][j];
-          }
-        }
-      }
-      lead++;
-    }
-    return A;
   }
 
   function removeZeroRows(matrix) {
     return matrix.filter(row => !row.every(element => element === 0));
   }
-
-  function nullSpace(rref) {
-    // Get the dimensions of the matrix
-    const numRows = rref.length;
-    const numCols = rref[0].length;
-  
-    // Find the columns corresponding to the free variables
-    const freeCols = [];
-    for (let j = 0; j < numCols - 1; j++) {
-      let isFree = true;
-      for (let i = 0; i < numRows; i++) {
-        if (rref[i][j] !== 0) {
-          isFree = false;
-          break;
-        }
-      }
-      if (isFree) {
-        freeCols.push(j);
-      }
-    }
-  
-    // Generate the basis of the nullspace using the free variables
-    const basis = [];
-    for (let j of freeCols) {
-      const vec = Array(numCols - 1).fill(0);
-      vec[j] = 1;
-      for (let i = 0; i < numRows; i++) {
-        if (rref[i][j] !== 0) {
-          for (let k of freeCols) {
-            vec[k] -= rref[i][k] * vec[j];
-          }
-          vec[numCols - 1] += rref[i][j] * vec[j];
-        }
-      }
-      basis.push(vec);
-    }
-  
-    return basis;
-  } 
   
   function parseFormulas(side) {
     const formulas = side.split("+").map((f) => f.trim());
@@ -216,26 +128,109 @@ function balanceChemicalEquation(input) {
     return count;
   }
 
-function findNullSpace(matrix) {
-    const m = matrix.length;
-    const n = matrix[0].length;
-    console.log(m,n);
-    matrix = math.matrix(matrix);
+  function isBalanced(matrix){
+    const numRows = matrix.length;
+    const numCols = matrix[0].length;
+    for(let r = 0; r<numRows; r++){
+        let total = 0
+        for(let c = 0; c<numCols; c++){
+            total += matrix[r][c]
+        }
+        if (total != 0){
+            return false;
+        }
+    }
 
-    const A = math.subset(matrix, math.index(math.range(0, m), math.range(0, n - 1)));
-    console.log("A", A);
+    return true;
+  }
 
+  function balance(matrix){
+    const rows = matrix.length;
+    const columns = matrix[0].length;
+    let fMatrix = matrix.map(row => row.map(ele => new Fraction(ele.toString() + "/1") ))
+
+    let lead = 0;
+    for (let r = 0; r < rows; r++) {
+        if (columns <= lead) {
+        return fMatrix.map(row => row.map(ele => ele.valueOf()));;
+        }
+        let i = r;
+        while (fMatrix[i][lead].valueOf() == 0) {
+        i++;
+        if (rows == i) {
+            i = r;
+            lead++;
+            if (columns == lead) {
+            return fMatrix.map(row => row.map(ele => ele.valueOf()));;
+            }
+        }
+        }
+        let tmp = fMatrix[i];
+        fMatrix[i] = fMatrix[r];
+        fMatrix[r] = tmp;
+        let val = fMatrix[r][lead];
+        for (let j = 0; j < columns; j++) {
+            fMatrix[r][j] = fMatrix[r][j].div(val);
+        }
+        for (let i = 0; i < rows; i++) {
+        if (i == r) continue;
+        val = fMatrix[i][lead];
+        for (let j = 0; j < columns; j++) {
+            fMatrix[i][j] = fMatrix[i][j].sub(fMatrix[r][j].mul(val));
+        }
+        }
+        lead++;
+    }   
+
+        for (let r = 0; r < rows; r++){
+            fMatrix[r] = integerizeRow(fMatrix[r]);
+        }
+        return fMatrix.map(row => row.map(ele => ele.valueOf()));
+    }
+
+    function integerizeRow(arr) {
+        let lcmVal = 1;
+        for(let col = 0; col < arr.length; col++){
+            if (arr[col].valueOf() != 0){
+                lcmVal = lcm(lcmVal, arr[col].d);
+            }
+        }
+        console.log("LCM VAL", lcmVal);
+        return arr.map(ele => ele.mul(lcmVal));
+    }
+
+    function lcm(num1, num2) {        
+        return (num1 * num2) / gcd(num1, num2);
+    }    
+
+    function gcd(a, b) {
+        if (b === 0) {
+            return a;
+        }
+        return gcd(b, a % b);
+    }
+
+    function multiplyColumns(matrix){
+        const rows = matrix.length;
+        const cols = matrix[0].length;
+        const coeff = new Array(cols).fill(1);
+        let lcmVal = 0;
+        while(!isBalanced(matrix)){
+            for(let r = 0; r < rows; r++){
+                lcmVal = lcm(matrix[r][r], Math.abs(matrix[r][cols-1]));
+                coeff[r] *= lcmVal/(Math.abs(matrix[r][r]));
+                coeff[cols-1] *= lcmVal/(Math.abs(matrix[r][cols-1]));
+                matrix[r][r] *= lcmVal/(Math.abs(matrix[r][r]));
+                console.log("COEFF", coeff);
+                for(let row = 0; row < rows; row++){
+                    matrix[row][cols-1] *= lcmVal/(Math.abs(matrix[r][cols-1]));
+                }
+                console.log(isBalanced(matrix), matrix);
+                
+            }
+        }
+        return coeff;
+    }
     
-    const b = math.subset(matrix, math.index(math.range(0, m), n - 1));
-  
-
-    console.log("B");
-    console.log(b);
-    const x = math.lusolve(A, b);
-    console.log("X")
-    console.log(x);
-    return x;
-    return x._data.map(row => row[0]);
-}
 
 export default balanceChemicalEquation;
