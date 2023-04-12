@@ -8,11 +8,12 @@ function balanceChemicalEquation(input) {
   
     // Parse the formulas on each side of the equation
     const leftFormulas = parseFormulas(leftSide);
-    console.log(leftFormulas);
     const rightFormulas = parseFormulas(rightSide);
+    console.log(leftFormulas, rightFormulas);
 
     // Get the list of all unique atoms in the equation
     const atoms = getUniqueAtoms([...leftFormulas, ...rightFormulas]);
+    console.log("ATOMS", atoms);
   
     // Construct the matrix of coefficients for the system of equations
     const coefficientMatrix = constructMatrix(leftFormulas, rightFormulas, atoms);
@@ -48,13 +49,9 @@ function balanceChemicalEquation(input) {
     return {error: false, message: "", value: balancedEquation};
 
   }
-
-  function removeZeroRows(matrix) {
-    return matrix.filter(row => !row.every(element => element === 0));
-  }
   
   function parseFormulas(side) {
-    const formulas = side.split("+").map((f) => f.trim());
+    const formulas = side.split(" + ").map((f) => f.trim());
     return formulas;
   }
   
@@ -71,6 +68,7 @@ function balanceChemicalEquation(input) {
     return Array.from(atoms);
   }
   
+
   function constructMatrix(leftFormulas, rightFormulas, atoms) {
     const matrix = [];
     for (const atom of atoms) {
@@ -85,7 +83,41 @@ function balanceChemicalEquation(input) {
       }
       matrix.push(row);
     }
+    console.log(getCharges(leftFormulas, rightFormulas))
+    matrix.push(getCharges(leftFormulas, rightFormulas))
     return matrix;
+  }
+
+  function getCharges(leftFormulas, rightFormulas){
+    const regex = /(\d*)([-+])$/;
+    const row = [];
+
+    for(const compound of leftFormulas){
+      const match = compound.match(regex);
+      if (!match) {
+        // If the string doesn't end with a sign, assume it's neutral
+        row.push(0);
+      } else {
+        const number = match[1] ? parseInt(match[1]) : 1; // Default to 1 if no number is specified
+        const sign = match[2];
+        const charge = sign === "-" ? -number : number;
+        row.push(charge);
+       }
+    }
+
+    for(const compound of rightFormulas){
+      const match = compound.match(regex);
+			if (!match) {
+        // If the string doesn't end with a sign, assume it's neutral
+        row.push(0);
+      } else{
+        const number = match[1] ? parseInt(match[1]) : 1; // Default to 1 if no number is specified
+        const sign = match[2];
+        const charge = sign === "-" ? -number : number;
+        row.push(-charge);
+      }
+    }
+    return row;
   }
   
   function getCountOfAtomInFormula(atom, formula) {
@@ -152,7 +184,7 @@ function balanceChemicalEquation(input) {
     let lead = 0;
     for (let r = 0; r < rows; r++) {
         if (columns <= lead) {
-        return fMatrix.map(row => row.map(ele => ele.valueOf()));;
+        return fMatrix.map(row => row.map(ele => ele.valueOf()));
         }
         let i = r;
         while (fMatrix[i][lead].valueOf() == 0) {
@@ -161,7 +193,7 @@ function balanceChemicalEquation(input) {
             i = r;
             lead++;
             if (columns == lead) {
-            return fMatrix.map(row => row.map(ele => ele.valueOf()));;
+            return fMatrix.map(row => row.map(ele => ele.valueOf()));
             }
         }
         }
@@ -195,20 +227,19 @@ function balanceChemicalEquation(input) {
                 lcmVal = lcm(lcmVal, arr[col].d);
             }
         }
-        console.log("LCM VAL", lcmVal);
         return arr.map(ele => ele.mul(lcmVal));
     }
 
     function lcm(num1, num2) {        
-        return (num1 * num2) / gcd(num1, num2);
-    }    
+      return (num1 * num2) / gcd(num1, num2);
+  }    
 
-    function gcd(a, b) {
-        if (b === 0) {
-            return a;
-        }
-        return gcd(b, a % b);
-    }
+  function gcd(a, b) {
+      if (b === 0) {
+          return a;
+      }
+      return gcd(b, a % b);
+  }
 
     function multiplyColumns(matrix){
         const rows = matrix.length;
@@ -217,16 +248,18 @@ function balanceChemicalEquation(input) {
         let lcmVal = 0;
         while(!isBalanced(matrix)){
             for(let r = 0; r < rows; r++){
-                lcmVal = lcm(matrix[r][r], Math.abs(matrix[r][cols-1]));
-                coeff[r] *= lcmVal/(Math.abs(matrix[r][r]));
-                coeff[cols-1] *= lcmVal/(Math.abs(matrix[r][cols-1]));
-                matrix[r][r] *= lcmVal/(Math.abs(matrix[r][r]));
-                console.log("COEFF", coeff);
-                for(let row = 0; row < rows; row++){
-                    matrix[row][cols-1] *= lcmVal/(Math.abs(matrix[r][cols-1]));
+              lcmVal = lcm(matrix[r][r], Math.abs(matrix[r][cols-1]));
+              console.log(lcmVal);
+              if(!isNaN(lcmVal) && lcmVal !== 0){
+                const temp = lcmVal/(Math.abs(matrix[r][cols-1]));
+                  coeff[r] *= lcmVal/(Math.abs(matrix[r][r]));
+                  coeff[cols-1] *= temp;
+                  matrix[r][r] *= lcmVal/(Math.abs(matrix[r][r]));
+                  console.log("COEFF", coeff);
+                  for(let row = 0; row < rows; row++){
+                      matrix[row][cols-1] *= temp;
+                  }
                 }
-                console.log(isBalanced(matrix), matrix);
-                
             }
         }
         return coeff;
