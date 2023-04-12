@@ -83,8 +83,12 @@ function balanceChemicalEquation(input) {
       }
       matrix.push(row);
     }
-    console.log(getCharges(leftFormulas, rightFormulas))
-    matrix.push(getCharges(leftFormulas, rightFormulas))
+    const chargeRow = getCharges(leftFormulas, rightFormulas)
+    for(let ele = 0; ele < chargeRow.length; ele++ ){
+      if(chargeRow[ele] !== 0){
+        matrix.push(getCharges(leftFormulas, rightFormulas))
+      }
+    }
     return matrix;
   }
 
