@@ -1,21 +1,22 @@
 import '../css/EquationBalanceCalc.css';
-import { useState, useEffect } from 'react';
-import balanceChemicalEquation from '../calcFunctions/EquationBalanceFunc2';
+import { useState} from 'react';
+import balanceChemicalEquation from '../calcFunctions/EquationBalanceFunc';
 
 function EquationBalanceCalc() {
     const [text, setText] = useState("");
-    const [molarMassText, setMolarMassText] = useState("");
+    const [balancedEquation, setBalancedEquation] = useState({});
     function handleSubmit (){
-      let coefficients = balanceChemicalEquation(text);
-      console.log(coefficients);
+      setBalancedEquation(balanceChemicalEquation(text));
     }
 
   return (
     <div className='calc-container'>
-        <h1>Chemical Equation</h1>
+        <h1>CHEMICAL EQUATION BALANCER</h1>
         <input placeholder='Ex: CaCO3, NH4^1+, BaBr2, SO4^2-' onChange={(val)=>{setText(val.target.value);}} />
+
+        {balancedEquation.error ? <h1 style={{color: 'red', fontSize: '18px', fontWeight: 'bold'}}>{balancedEquation.message}</h1>: ""}
         <button className='submit' onClick={handleSubmit}>Calculate</button>
-        {/* {text ? <h3>Calculated Molar Mass: {molarMassText}</h3>: null} */}
+        {!balancedEquation.error ? <h3> Balanced Chemical Equation: {balancedEquation.value}</h3> : ""}
     </div>
   );
 }
