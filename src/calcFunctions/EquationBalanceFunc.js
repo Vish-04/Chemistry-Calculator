@@ -86,7 +86,8 @@ function balanceChemicalEquation(input) {
     const chargeRow = getCharges(leftFormulas, rightFormulas)
     for(let ele = 0; ele < chargeRow.length; ele++ ){
       if(chargeRow[ele] !== 0){
-        matrix.push(getCharges(leftFormulas, rightFormulas))
+        matrix.push(chargeRow);
+        break;
       }
     }
     return matrix;
@@ -121,6 +122,7 @@ function balanceChemicalEquation(input) {
         row.push(-charge);
       }
     }
+    console.log("ROW", row);
     return row;
   }
   
